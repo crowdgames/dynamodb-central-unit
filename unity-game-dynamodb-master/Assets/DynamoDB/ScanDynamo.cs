@@ -27,6 +27,7 @@ public class ScanDynamo : MonoBehaviour {
     }
 
 
+
     // Method for querying the data for a specific run, 
     // and then moving the player along the path data
     void Scan()
@@ -34,11 +35,12 @@ public class ScanDynamo : MonoBehaviour {
         var obj = new JSONObject();
         DateTime now = DateTime.UtcNow;
 
-        obj["TableName"] = "Unity";
+        obj["TableName"] ="unity-dynamodb-test" ; //"Unity";
         obj["FilterExpression"] = "run_id = :val";
         obj["ExpressionAttributeValues"][":val"]["S"] = run_id;
         obj["ReturnConsumedCapacity"] = "TOTAL";
 
+        Debug.Log("Query complete!");
         http.BuildWWWRequest(obj.ToString(), now);
 
         StartCoroutine(http.WaitForRequest(http.www, callback => {
@@ -46,7 +48,7 @@ public class ScanDynamo : MonoBehaviour {
             {
                 // Put results from callback into a JSON object
                 var results = JSON.Parse(callback);
-                
+                Debug.Log(results);
                 // Sort results into an Action array
                 points = new Action[results["Items"].Count];
                 for(int i = 0; i < results["Items"].Count; i++) {
@@ -58,7 +60,9 @@ public class ScanDynamo : MonoBehaviour {
                             double time = results["Items"][p]["Stamp"]["S"].AsDouble;
                             int action_count = results["Items"][p]["action_count"]["S"].AsInt;
                             points[i] = new Action(action, time, action_count);
+                            
                         }
+                        
                     }
                 }
 
