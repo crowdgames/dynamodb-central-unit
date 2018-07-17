@@ -47,7 +47,7 @@ public class Logger : MonoBehaviour {
 
         var Item = new JSONObject();
         //Item["Log"]["S"] = log;
-        Item["Person"]["S"] = MainMenu.username;
+        Item["Person"]["S"] = "Enter user name here"; 
         Item["Log"]["S"] = log;
         Item["Action"]["S"] = keyEvent;
        //Debug.Log("Key logged: " + keyEvent);
